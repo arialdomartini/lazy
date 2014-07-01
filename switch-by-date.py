@@ -1,4 +1,4 @@
-#!/usr/local/opt/pyenv/shims/python
+#!/usr/local/bin/python
 import sys
 import os
 
