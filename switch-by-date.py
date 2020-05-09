@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!python3
 import sys
 import os
 
@@ -7,17 +7,20 @@ def modification_date(filename):
     t = os.path.getmtime(filename)
     return datetime.date.fromtimestamp(t)
 
-mypath = sys.argv[1]
+working_path = sys.argv[1]
 
 from os import listdir
 from os.path import isfile, join
-files = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
+files = [ f for f in listdir(working_path) if isfile(join(working_path,f)) ]
 
 for fname in files:
-    print(fname)
-    f = join(mypath,fname)
-    created_at = modification_date(f)
-    dird = join(mypath, str(created_at)) 
-    if( not os.path.isdir(dird)):
-        os.mkdir(dird)
-    os.rename(f, join(dird, fname))
+    original_path = join(working_path,fname)
+    created_at = modification_date(original_path)
+    date_dir = join(working_path, str(created_at))
+    print(f"{fname} => {date_dir}")
+    
+    if(True):
+        if( not os.path.isdir(date_dir)):
+            os.mkdir(date_dir)
+        os.rename(fname, join(date_dir, fname))
+
