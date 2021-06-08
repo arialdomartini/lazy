@@ -1,4 +1,4 @@
 ExifRead==2.1.2
-Pillow==7.1.2
+Pillow==8.2.0
 pytz==2019.3
 timestring==1.6.4
