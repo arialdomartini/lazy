@@ -1,6 +1,10 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
+using Lazy.CommandLine;
+using Lazy.ExifManagement;
+using Lazy.IPhoneBackupsManagement;
+using CommandExtensions = Lazy.CommandLine.CommandExtensions;
 
 namespace Lazy
 {

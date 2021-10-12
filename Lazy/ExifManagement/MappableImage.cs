@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Linq;
 using LanguageExt;
-using Lazy.ImageHandlers;
+using Lazy.ExifManagement.ImageHandlers;
 using static LanguageExt.Prelude;
 
-namespace Lazy
+namespace Lazy.ExifManagement
 {
     internal static class OptionExtensions
     {

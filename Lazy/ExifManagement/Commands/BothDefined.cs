@@ -1,8 +1,8 @@
 using System;
 using System.IO;
-using Lazy.ImageHandlers;
+using Lazy.ExifManagement.ImageHandlers;
 
-namespace Lazy.Commands
+namespace Lazy.ExifManagement.Commands
 {
     internal class BothDefined : ICondition
     {

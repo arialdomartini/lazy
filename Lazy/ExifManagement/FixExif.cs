@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Lazy.Commands;
-using Lazy.ImageHandlers;
+using Lazy.ExifManagement.Commands;
+using Lazy.ExifManagement.ImageHandlers;
 
-namespace Lazy
+namespace Lazy.ExifManagement
 {
     internal static class FixExif
     {

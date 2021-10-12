@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Lazy
+namespace Lazy.IPhoneBackupsManagement
 {
     internal static class FromIPhone
     {

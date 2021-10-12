@@ -2,7 +2,7 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 
-namespace Lazy
+namespace Lazy.CommandLine
 {
     internal static class CommandExtensions{
         internal static Command Create(string name, string description, Action<bool> handler)

@@ -1,6 +1,6 @@
 using System;
 
-namespace Lazy
+namespace Lazy.CommandLine
 {
     internal static class Version
     {

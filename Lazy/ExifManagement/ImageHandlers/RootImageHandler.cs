@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using LanguageExt;
 
-namespace Lazy.ImageHandlers
+namespace Lazy.ExifManagement.ImageHandlers
 {
     internal class RootImageHandler : IImageHandler
     {

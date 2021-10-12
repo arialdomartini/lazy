@@ -1,6 +1,6 @@
 using System;
 
-namespace Lazy.Commands
+namespace Lazy.ExifManagement.Commands
 {
     internal class NothingDefined : ICondition
     {

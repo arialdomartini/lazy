@@ -3,7 +3,7 @@ using System.IO;
 using ExifLibrary;
 using LanguageExt;
 
-namespace Lazy.ImageHandlers
+namespace Lazy.ExifManagement.ImageHandlers
 {
     internal class JpegImageHandler : IImageHandler
     {

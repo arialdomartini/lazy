@@ -1,4 +1,4 @@
-namespace Lazy
+namespace Lazy.ExifManagement
 {
     internal interface ICondition
     {

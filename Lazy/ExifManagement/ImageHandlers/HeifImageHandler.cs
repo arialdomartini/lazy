@@ -4,7 +4,7 @@ using LanguageExt;
 using LibHeifSharp;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
-namespace Lazy.ImageHandlers
+namespace Lazy.ExifManagement.ImageHandlers
 {
     internal class HeifImageHandler : IImageHandler
     {

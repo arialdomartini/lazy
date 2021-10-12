@@ -1,8 +1,8 @@
 using System;
 using System.Data;
-using Lazy.ImageHandlers;
+using Lazy.ExifManagement.ImageHandlers;
 
-namespace Lazy.Commands
+namespace Lazy.ExifManagement.Commands
 {
     internal class OnlyFileSystemDefined : ICondition
     {

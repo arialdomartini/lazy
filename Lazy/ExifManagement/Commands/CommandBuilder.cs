@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lazy.Commands
+namespace Lazy.ExifManagement.Commands
 {
     internal class CommandBuilder
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using LanguageExt;
 using static LanguageExt.Prelude;
 
-namespace Lazy.Commands
+namespace Lazy.ExifManagement.Commands
 {
     internal class OnlyExifDefined : ICondition
     {

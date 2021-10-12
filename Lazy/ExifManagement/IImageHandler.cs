@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using LanguageExt;
 
-namespace Lazy
+namespace Lazy.ExifManagement
 {
     internal interface IImageHandler
     {
