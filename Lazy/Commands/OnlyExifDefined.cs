@@ -1,4 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace Lazy.Commands
 {
@@ -21,7 +26,37 @@ namespace Lazy.Commands
             }
 
             void ICommand.Run(bool dryRun) =>
-                Console.WriteLine($"{_mappableImage.FileInfo.FullName}, UpdateFileSystemDate, NOOP {_mappableImage.ExifDateAsString} => FileSystem");
+                MoveFile(dryRun);
+
+            private void MoveFile(bool dryRun)
+            {
+                Console.Write(
+                    $"{_mappableImage.FileInfo.FullName}, UpdateFileSystemDate, tryDelete {_mappableImage.ExifDateAsString} => FileSystem");
+                var units = (
+                    from exifDate in _mappableImage.ExifDate
+                    select MoveTheFile(_mappableImage.FileInfo, dryRun))
+                    .ToList();
+                
+                Console.WriteLine();
+            }
+
+            private Unit MoveTheFile(FileInfo fileInfo, bool dryRun)
+            {
+                var duplicate = fileInfo.Directory
+                    .EnumerateFiles("*.*", SearchOption.AllDirectories)
+                    .FirstOrDefault(f => f.DirectoryName != fileInfo.DirectoryName && f.Name == fileInfo.Name);
+
+                if (duplicate == null) return unit;
+                
+                Console.Write($"; Duplicated by {duplicate.FullName}");
+                Console.Write($"; rm {fileInfo.FullName}");
+                if(!dryRun)
+                    File.Delete(fileInfo.FullName);
+                return unit;
+            }
+
+            private string ParentWithDate(FileInfo fileInfo, in DateTime exifDate) =>
+                Path.Combine(fileInfo.Directory.Parent.FullName, exifDate.ToLongDateWithDashes());
         }
 
     }

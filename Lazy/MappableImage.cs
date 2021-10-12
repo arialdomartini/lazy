@@ -10,7 +10,10 @@ namespace Lazy
     internal static class OptionExtensions
     {
         internal static string Show(this Option<DateTime> dateTime) =>
-            dateTime.Match(d => d.ToString("yyyy-MM-dd"), () => "not defined");
+            dateTime.Match(ToLongDateWithDashes, () => "not defined");
+
+        internal static string ToLongDateWithDashes(this DateTime d) =>
+            d.ToString("yyyy-MM-dd");
     }
 
     internal class MappableImage
