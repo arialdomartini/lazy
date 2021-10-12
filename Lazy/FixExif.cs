@@ -24,7 +24,7 @@ namespace Lazy
                 new OnlyFileSystemDefined(RootImageHandler)
             });
             
-            ImageExtensions = new(StringComparer.OrdinalIgnoreCase) {".jpg", ".heic", ".png"};
+            ImageExtensions = new(StringComparer.OrdinalIgnoreCase) {".jpg", ".heic"};
         }
 
         internal static void Run(DirectoryInfo workingDirectory, bool dryRun)
