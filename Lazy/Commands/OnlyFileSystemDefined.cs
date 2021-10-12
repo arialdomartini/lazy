@@ -1,6 +1,5 @@
 using System;
 using System.Data;
-using LanguageExt;
 using Lazy.ImageHandlers;
 
 namespace Lazy.Commands
