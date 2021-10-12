@@ -30,7 +30,7 @@ namespace Lazy.ExifManagement.Commands
             private void MoveFile(bool dryRun)
             {
                 Console.Write(
-                    $"{_mappableImage.FileInfo.FullName}, UpdateFileSystemDate, tryDelete {_mappableImage.ExifDateAsString} => FileSystem");
+                    $"{_mappableImage.FileInfo.FullName}, UpdateFileSystemDate, file not enclosed in dir with date {_mappableImage.ExifDateAsString}");
                 var units = (
                     from exifDate in _mappableImage.ExifDate
                     select MoveTheFile(_mappableImage.FileInfo, dryRun))
@@ -53,9 +53,6 @@ namespace Lazy.ExifManagement.Commands
                     File.Delete(fileInfo.FullName);
                 return unit;
             }
-
-            private string ParentWithDate(FileInfo fileInfo, in DateTime exifDate) =>
-                Path.Combine(fileInfo.Directory.Parent.FullName, exifDate.ToLongDateWithDashes());
         }
 
     }
