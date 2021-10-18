@@ -32,10 +32,18 @@ namespace Lazy.IPhoneBackupsManagement.New
             var list = _exifTool.GetTagsAsync(fileInfo.FullName).Result;
             var dateTimeOriginal = list.FirstOrDefault(l => l.Name == "CreateDate");
 
-            if (dateTimeOriginal == null)
+            if (dateTimeOriginal is not { IsDate: true })
                 return ImageWithoutExifDate.Build(fileInfo);
-            
-            return ImageWithExifDate.Build(fileInfo, dateTimeOriginal);
+
+            try
+            {
+                return ImageWithExifDate.Build(fileInfo, dateTimeOriginal);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Failed parsing file:\n{fileInfo.FullName}");
+                throw;
+            }
         }
 
         private static IOperation ToOperation(Either<ImageWithoutExifDate, ImageWithExifDate> image,

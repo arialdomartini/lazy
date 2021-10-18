@@ -18,9 +18,7 @@ namespace Lazy.IPhoneBackupsManagement.New.Operations
         {
             var outputDirectory = Path.Combine(_outputDirectory.FullName, "_noDate");
             
-            _image.FileInfo.Move(outputDirectory, dryRun);
-            
-            return $"mv {_image.FileInfo.FullName} {outputDirectory.MkDirP(dryRun)}";
+            return _image.FileInfo.Move(outputDirectory, dryRun);
         }
     }
 }

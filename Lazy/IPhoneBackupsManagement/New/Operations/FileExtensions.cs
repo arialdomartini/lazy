@@ -6,7 +6,7 @@ namespace Lazy.IPhoneBackupsManagement.New.Operations
 {
     internal static class FileExtensions
     {
-        internal static void Move(this FileInfo fileInfo, string outputDirectory, bool dryRun)
+        internal static string Move(this FileInfo fileInfo, string outputDirectory, bool dryRun)
         {
             if (!dryRun)
             {
@@ -16,6 +16,7 @@ namespace Lazy.IPhoneBackupsManagement.New.Operations
                 File.Move(fileInfo.FullName,
                     destFileName);
             }
+            return $"mv {fileInfo.FullName} {outputDirectory}";
         }
 
         private static string CalculateDestinationFileName(string directory, FileInfo fileInfo)
