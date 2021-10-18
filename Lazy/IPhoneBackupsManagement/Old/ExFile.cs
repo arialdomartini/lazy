@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using ExifLibrary;
 
-namespace Lazy.IPhoneBackupsManagement
+namespace Lazy.IPhoneBackupsManagement.Old
 {
     readonly struct ExFile
     {

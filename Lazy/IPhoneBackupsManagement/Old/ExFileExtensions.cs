@@ -1,6 +1,6 @@
 using ExifLibrary;
 
-namespace Lazy.IPhoneBackupsManagement
+namespace Lazy.IPhoneBackupsManagement.Old
 {
     internal static class ExFileExtensions
     {

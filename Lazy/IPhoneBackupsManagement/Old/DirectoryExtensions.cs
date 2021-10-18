@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Lazy.IPhoneBackupsManagement
+namespace Lazy.IPhoneBackupsManagement.Old
 {
     internal static class DirectoryExtensions
     {

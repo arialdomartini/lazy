@@ -2,15 +2,14 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace Lazy.IPhoneBackupsManagement
+namespace Lazy.IPhoneBackupsManagement.Old
 {
-    internal static class FromIPhone
+    internal static class FromIPhoneOld
     {
         private const string Whatsapp = "whatsapp";
         private const string Pictures = "jpeg";
-        private const bool DryRun = true;
 
-        internal static void Run(DirectoryInfo workingDirectory)
+        internal static void Run(DirectoryInfo workingDirectory, bool dryRun)
         {
             var workingPath = workingDirectory.FullName;
             
@@ -30,10 +29,10 @@ namespace Lazy.IPhoneBackupsManagement
                 try
                 {
                     if (file.TakenAt() == null)
-                        ElaborateWhatsAppFile(workingPath, file);
+                        ElaborateWhatsAppFile(workingPath, file, dryRun);
                     else
                     {
-                        ElaboratePictureFile(workingPath, file);
+                        ElaboratePictureFile(workingPath, file, dryRun);
                     }
                 }
                 catch (Exception e)
@@ -51,17 +50,17 @@ namespace Lazy.IPhoneBackupsManagement
                 )
             );
 
-        private static void ElaboratePictureFile(string workingPath, ExFile file)
+        private static void ElaboratePictureFile(string workingPath, ExFile file, bool dryRun)
         {
             var takenAt = file.TakenAt().Value;
-            var pictureFilesDir = CreateDirectory(workingPath, file.FileInfo.DirectoryName, Pictures);
-            var yearDir = CreateDirectory(workingPath, pictureFilesDir, takenAt.Year.ToString());
-            var monthDir = CreateDirectory(workingPath, yearDir, $"{takenAt.Month:00}");
-            var dateDir = CreateDirectory(workingPath, monthDir, $"{takenAt.Year:0000}-{takenAt.Month:00}-{takenAt.Day:00}");
+            var pictureFilesDir = CreateDirectory(workingPath, file.FileInfo.DirectoryName, Pictures, dryRun);
+            var yearDir = CreateDirectory(workingPath, pictureFilesDir, takenAt.Year.ToString(), dryRun);
+            var monthDir = CreateDirectory(workingPath, yearDir, $"{takenAt.Month:00}", dryRun);
+            var dateDir = CreateDirectory(workingPath, monthDir, $"{takenAt.Year:0000}-{takenAt.Month:00}-{takenAt.Day:00}", dryRun);
 
             Console.WriteLine($"{file.FileInfo.FullName.RelativeTo(workingPath)} => {DirectoryExtensions.RelativeTo(dateDir, workingPath)}");
-            var destFileName = Path.Join((string?) dateDir, file.FileInfo.Name);
-            if(!DryRun)
+            var destFileName = Path.Join(dateDir, file.FileInfo.Name);
+            if(!dryRun)
             {
                 File.Move(file.FileInfo.FullName, destFileName);
                 File.SetCreationTime(destFileName, takenAt);
@@ -70,35 +69,35 @@ namespace Lazy.IPhoneBackupsManagement
             }
         }
 
-        private static void ElaborateWhatsAppFile(string workingPath, ExFile file)
+        private static void ElaborateWhatsAppFile(string workingPath, ExFile file, bool dryRun)
         {
             Console.WriteLine("WhatsApp file");
-            var whatsAppDirectory = CreateWhatsAppDirectoryFor(workingPath, file);
+            var whatsAppDirectory = CreateWhatsAppDirectoryFor(workingPath, file, dryRun);
 
-            Move(workingPath, file, whatsAppDirectory);
+            Move(workingPath, file, whatsAppDirectory, dryRun);
             Console.WriteLine();
         }
 
-        private static void Move(string workingPath, ExFile file, string whatsAppDirectory)
+        private static void Move(string workingPath, ExFile file, string whatsAppDirectory, bool dryRun)
         {
             var destFileName = Path.Join(whatsAppDirectory, file.FileInfo.Name);
             Console.WriteLine($"{file.FileInfo.FullName.RelativeTo(workingPath)} => {destFileName.RelativeTo(workingPath)}");
 
-            if(!DryRun)
+            if(!dryRun)
                 File.Move(file.FileInfo.FullName, destFileName);
         }
 
-        private static string CreateWhatsAppDirectoryFor(string workingPath, ExFile file) =>
-            CreateDirectory(workingPath, file.FileInfo.DirectoryName, Whatsapp);
+        private static string CreateWhatsAppDirectoryFor(string workingPath, ExFile file, bool dryRun) =>
+            CreateDirectory(workingPath, file.FileInfo.DirectoryName, Whatsapp, dryRun);
 
-        private static string CreateDirectory(string workingPath, string fullPath, string directoryName)
+        private static string CreateDirectory(string workingPath, string fullPath, string directoryName, bool dryRun)
         {
             var directoryFullName = Path.Join(fullPath, directoryName);
             if (Directory.Exists(directoryFullName)) return directoryFullName;
 
             Console.WriteLine($"mkdir {directoryFullName.RelativeTo(workingPath)}");
 
-            if (!DryRun)
+            if (!dryRun)
                 Directory.CreateDirectory(directoryFullName);
 
             return directoryFullName;
