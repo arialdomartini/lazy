@@ -50,19 +50,5 @@ namespace Lazy.IPhoneBackupsManagement.New
 
         private static MoveToDateFolder MoveToDateFolder(ImageWithExifDate image, DirectoryInfo outputDirectory) =>
             new(image, outputDirectory);
-
-        private static void PrintDateTimeOriginal(ExifTool et, FileInfo fileInfo)
-        {
-            var list = et.GetTagsAsync(fileInfo.FullName).Result;
-            var firstOrDefault = list.FirstOrDefault(l => l.Name == "DateTimeOriginal");
-            Option<string> dateTimeOriginal = firstOrDefault?.Value;
-
-            if (dateTimeOriginal.IsSome)
-                Console.WriteLine($"File: {fileInfo.FullName}; ExifTags: {string.Join(",", dateTimeOriginal)}.");
-            else
-            {
-                Console.WriteLine($"File: {fileInfo.FullName}; No exif date is defined");
-            }
-        }
     }
 }
