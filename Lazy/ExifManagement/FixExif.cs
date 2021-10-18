@@ -46,7 +46,7 @@ namespace Lazy.ExifManagement
 
         private static IEnumerable<FileInfo> AllImagesIn(DirectoryInfo directory) =>
             directory
-                .EnumerateFiles("*.*", SearchOption.AllDirectories)
+                .AllFiles()
                 .Where(IsAnImage);
 
         private static bool IsAnImage(FileInfo fileInfo) =>

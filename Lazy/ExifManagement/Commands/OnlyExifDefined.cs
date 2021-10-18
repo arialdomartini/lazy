@@ -42,7 +42,7 @@ namespace Lazy.ExifManagement.Commands
             private Unit MoveTheFile(FileInfo fileInfo, bool dryRun)
             {
                 var duplicate = fileInfo.Directory
-                    .EnumerateFiles("*.*", SearchOption.AllDirectories)
+                    .AllFiles()
                     .FirstOrDefault(f => f.DirectoryName != fileInfo.DirectoryName && f.Name == fileInfo.Name);
 
                 if (duplicate == null) return unit;
