@@ -14,18 +14,19 @@ namespace Lazy.IPhoneBackupsManagement.New.Operations
             _outputDirectory = outputDirectory;
         }
 
-        string IOperation.Run()
+        string IOperation.Run(bool dryRun)
         {
             var imageDateTimeOriginal = _image.DateTimeOriginal;
-            var directory =
+            var outputDirectory =
                 Path.Combine(
                     _outputDirectory.FullName,
                     imageDateTimeOriginal.Year.ToString("0000"),
                     imageDateTimeOriginal.Month.ToString("00"),
                     imageDateTimeOriginal.Day.ToString("00")
                     );
-            
-            return $"mv {_image.FileInfo.FullName} {directory}";
+
+            _image.FileInfo.Move(outputDirectory, dryRun);
+            return $"mv {_image.FileInfo.FullName} {outputDirectory}";
         }
     }
 }

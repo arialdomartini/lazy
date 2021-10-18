@@ -2,6 +2,6 @@ namespace Lazy.IPhoneBackupsManagement.New
 {
     internal interface IOperation
     {
-        string Run();
+        string Run(bool dryRun);
     }
 }

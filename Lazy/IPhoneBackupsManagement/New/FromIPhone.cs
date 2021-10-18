@@ -22,7 +22,7 @@ namespace Lazy.IPhoneBackupsManagement.New
                 .AllFiles()
                 .Select(ToImage)
                 .Select((Either<ImageWithoutExifDate, ImageWithExifDate> image) => ToOperation(image, output))
-                .Select(operation => operation.Run());
+                .Select(operation => operation.Run(dryRun));
             
             Console.WriteLine(string.Join("\n", results));
         }
@@ -30,7 +30,7 @@ namespace Lazy.IPhoneBackupsManagement.New
         private Either<ImageWithoutExifDate, ImageWithExifDate> ToImage(FileInfo fileInfo)
         {
             var list = _exifTool.GetTagsAsync(fileInfo.FullName).Result;
-            var dateTimeOriginal = list.FirstOrDefault(l => l.Name == "DateTimeOriginal");
+            var dateTimeOriginal = list.FirstOrDefault(l => l.Name == "CreateDate");
 
             if (dateTimeOriginal == null)
                 return ImageWithoutExifDate.Build(fileInfo);

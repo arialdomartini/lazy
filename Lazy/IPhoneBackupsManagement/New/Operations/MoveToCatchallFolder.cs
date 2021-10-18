@@ -1,4 +1,5 @@
 using System.IO;
+using Lazy.IPhoneBackupsManagement.Old;
 
 namespace Lazy.IPhoneBackupsManagement.New.Operations
 {
@@ -13,10 +14,13 @@ namespace Lazy.IPhoneBackupsManagement.New.Operations
             _outputDirectory = outputDirectory;
         }
 
-        string IOperation.Run()
+        string IOperation.Run(bool dryRun)
         {
-            var output = Path.Combine(_outputDirectory.FullName, "_noDate");
-            return $"mv {_image.FileInfo.FullName} {output}";
+            var outputDirectory = Path.Combine(_outputDirectory.FullName, "_noDate");
+            
+            _image.FileInfo.Move(outputDirectory, dryRun);
+            
+            return $"mv {_image.FileInfo.FullName} {outputDirectory.MkDirP(dryRun)}";
         }
     }
 }
