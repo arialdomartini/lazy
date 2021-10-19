@@ -61,10 +61,10 @@ namespace Lazy.ExifManagement
             {
                 return MappableImage.From(fileInfo, RootImageHandler);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine($"Failure: unable to convert {fileInfo.FullName}");
-                throw e;
+                throw;
             }
         }
     }
