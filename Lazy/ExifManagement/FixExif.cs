@@ -39,7 +39,6 @@ namespace Lazy.ExifManagement
                     //Console.WriteLine();
                 });
         }
-
         private static IEnumerable<MappableImage> GetImages(this DirectoryInfo workingDirectory) =>
             AllImagesIn(workingDirectory)
                 .Select(ToMappableImage);

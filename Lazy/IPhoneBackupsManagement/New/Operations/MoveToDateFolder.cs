@@ -21,8 +21,7 @@ namespace Lazy.IPhoneBackupsManagement.New.Operations
                 Path.Combine(
                     _outputDirectory.FullName,
                     imageDateTimeOriginal.Year.ToString("0000"),
-                    imageDateTimeOriginal.Month.ToString("00"),
-                    imageDateTimeOriginal.Day.ToString("00")
+                    imageDateTimeOriginal.Month.ToString("00")
                     );
 
             _image.FileInfo.Move(outputDirectory, dryRun);

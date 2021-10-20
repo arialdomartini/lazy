@@ -30,7 +30,7 @@ namespace Lazy.IPhoneBackupsManagement.New
         private Either<ImageWithoutExifDate, ImageWithExifDate> ToImage(FileInfo fileInfo)
         {
             var list = _exifTool.GetTagsAsync(fileInfo.FullName).Result;
-            var dateTimeOriginal = list.FirstOrDefault(l => l.Name == "CreateDate");
+            var dateTimeOriginal = list.FirstOrDefault(l => l.Name == "DateTimeOriginal");
 
             if (dateTimeOriginal is not { IsDate: true })
                 return ImageWithoutExifDate.Build(fileInfo);
