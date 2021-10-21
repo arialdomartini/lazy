@@ -27,18 +27,20 @@ namespace Lazy
 
             var fixExif = CommandExtensions.Create(
                 "fix-exif", "Set all the missing Exif dates in Exif in a directory, inferring the missing dates from directory names",
-                dryRun =>
-                {
-                    FixExif.Run(workingDirectory, dryRun);
-                });
-            
+                dryRun => FixExif.Run(workingDirectory, dryRun));
+
+            var removeDuplicateJpg = CommandExtensions.Create(
+                "remove-duplicate-jpg", "Remove the JPG files that duplicate equivalent HEIC images",
+                dryRun => RemoveDuplicateJpg.Run(workingDirectory, dryRun)
+            );
             
             var rootCommand = new RootCommand
             {
                 new Option("--version", "The current version of this tool"),
                 fromIPhoneOld,
                 fromIPhone,
-                fixExif
+                fixExif,
+                removeDuplicateJpg
             };
             rootCommand.Handler = CommandHandler.Create(Version.VersionHandler);
 
