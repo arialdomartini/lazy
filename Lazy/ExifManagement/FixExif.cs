@@ -9,7 +9,6 @@ namespace Lazy.ExifManagement
 {
     internal static class FixExif
     {
-        private static readonly HashSet<string> ImageExtensions;
         private static readonly RootImageHandler RootImageHandler;
         private static readonly CommandBuilder CommandBuilder;
 
@@ -23,25 +22,28 @@ namespace Lazy.ExifManagement
                 new OnlyExifDefined(),
                 new OnlyFileSystemDefined(RootImageHandler)
             });
-            
-            ImageExtensions = new(StringComparer.OrdinalIgnoreCase) {".jpg", ".heic"};
         }
 
         internal static void Run(DirectoryInfo workingDirectory, bool dryRun)
         {
             workingDirectory
-                .GetImages()
-                .Select(mappableImage => CommandBuilder.CommandFor(mappableImage))
+                .GetImages(RootImageHandler)
+                .Select(CommandBuilder.ToCommand)
                 .ToList()
                 .ForEach(c =>
                 {
                     c.Run(dryRun);
-                    //Console.WriteLine();
                 });
         }
-        private static IEnumerable<MappableImage> GetImages(this DirectoryInfo workingDirectory) =>
+    }
+
+    internal static class ImagesExtensions
+    {
+        private static readonly HashSet<string> ImageExtensions = new(StringComparer.OrdinalIgnoreCase) {".jpg", ".heic"};
+
+        internal static IEnumerable<MappableImage> GetImages(this DirectoryInfo workingDirectory, RootImageHandler rootImageHandler) =>
             AllImagesIn(workingDirectory)
-                .Select(ToMappableImage);
+                .Select(fileInfo => ToMappableImage(fileInfo, rootImageHandler));
 
         private static IEnumerable<FileInfo> AllImagesIn(DirectoryInfo directory) =>
             directory
@@ -54,11 +56,11 @@ namespace Lazy.ExifManagement
         private static bool HasOfOfTheExtensions(this FileSystemInfo fileInfo, IReadOnlySet<string> imageExtensions) =>
             imageExtensions.Contains(Path.GetExtension(fileInfo.Name));
 
-        private static MappableImage ToMappableImage(FileInfo fileInfo)
+        private static MappableImage ToMappableImage(FileInfo fileInfo, RootImageHandler rootImageHandler)
         {
             try
             {
-                return MappableImage.From(fileInfo, RootImageHandler);
+                return MappableImage.From(fileInfo, rootImageHandler);
             }
             catch (Exception)
             {

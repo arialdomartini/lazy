@@ -12,7 +12,7 @@ namespace Lazy.ExifManagement.Commands
             _conditions = conditions;
         }
         
-        internal ICommand CommandFor(MappableImage mappableImage) =>
+        internal ICommand ToCommand(MappableImage mappableImage) =>
             _conditions
                 .First(c => c.CanHandle(mappableImage))
                 .GetCommand(mappableImage);
