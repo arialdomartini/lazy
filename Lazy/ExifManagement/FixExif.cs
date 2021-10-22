@@ -7,7 +7,7 @@ using Lazy.ExifManagement.ImageHandlers;
 
 namespace Lazy.ExifManagement
 {
-    internal static class FixExif
+    internal class FixExif
     {
         private static readonly RootImageHandler RootImageHandler;
         private static readonly CommandBuilder CommandBuilder;
@@ -24,7 +24,7 @@ namespace Lazy.ExifManagement
             });
         }
 
-        internal static void Run(DirectoryInfo workingDirectory, bool dryRun)
+        internal void Run(DirectoryInfo workingDirectory, bool dryRun)
         {
             workingDirectory
                 .GetImages(RootImageHandler)
