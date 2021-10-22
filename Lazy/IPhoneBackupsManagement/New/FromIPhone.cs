@@ -4,17 +4,16 @@ using System.Linq;
 using LanguageExt;
 using static LanguageExt.Prelude;
 using Lazy.IPhoneBackupsManagement.New.Operations;
-using NExifTool;
 
 namespace Lazy.IPhoneBackupsManagement.New
 {
     public class FromIPhone
     {
-        private readonly ExifTool _exifTool;
+        private readonly ExifWrapper _exifWrapper;
 
-        internal FromIPhone(ExifTool exifTool)
+        internal FromIPhone(ExifWrapper exifWrapper)
         {
-            _exifTool = exifTool;
+            _exifWrapper = exifWrapper;
         }
 
         internal void Run(DirectoryInfo workingDirectory, DirectoryInfo output, bool dryRun)
@@ -30,7 +29,7 @@ namespace Lazy.IPhoneBackupsManagement.New
         }
 
         private Either<ImageWithoutExifDate, ImageWithExifDate> ToImage(FileInfo fileInfo) =>
-            GetDateTimeOriginal(fileInfo).Match(
+            _exifWrapper.GetDateTimeOriginal(fileInfo).Match(
                 dateTime => ImageWithExifDate(fileInfo, dateTime),
                 () => ImageWithoutExifDate.Build(fileInfo)
             );
@@ -47,22 +46,7 @@ namespace Lazy.IPhoneBackupsManagement.New
                 throw;
             }
         }
-
-        private Option<DateTime> GetDateTimeOriginal(FileInfo fileInfo)
-        {
-            var list = _exifTool.GetTagsAsync(fileInfo.FullName).Result;
-            var dateTimeOriginal = list.FirstOrDefault(l => l.Name == "DateTimeOriginal");
-
-            if (dateTimeOriginal is not { IsDate: true })
-                return None;
-
-            static DateTime ParseDate(Tag dateTimeOriginal1) =>
-                DateTime.Parse(dateTimeOriginal1.Value.Split(" ").First().Replace(":", "/"));
-
-            var dateTime = ParseDate(dateTimeOriginal);
-            return Some(dateTime);
-        }
-
+        
         private static IOperation ToOperation(Either<ImageWithoutExifDate, ImageWithExifDate> image,
             DirectoryInfo outputDirectory) =>
             image.Match<IOperation>(

@@ -18,7 +18,8 @@ namespace Lazy
         {
             var workingDirectory = new DirectoryInfo(CurrentPath);
             var exifTool = new ExifTool(new ExifToolOptions { ExifToolPath = "/usr/bin/vendor_perl/exiftool" });
-            
+            var exifWrapper = new ExifWrapper(exifTool);
+
             var fromIPhoneOld = CommandExtensions.Create(
                 "from-iphone-old", "Converts a dump from iPhone into a date-based directory structure", 
                 dryRun => FromIPhoneOld.Run(workingDirectory, dryRun));
@@ -27,8 +28,9 @@ namespace Lazy
                 "from-iphone", "Converts a dump from iPhone into a date-based directory structure",
                 (dryRun, output) =>
                 {
-                    new FromIPhone(exifTool)
+                    new FromIPhone(exifWrapper)
                         .Run(workingDirectory, output, dryRun);
+                    
                 });
 
             var fixExif = CommandExtensions.Create(
