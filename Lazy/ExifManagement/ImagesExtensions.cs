@@ -8,22 +8,11 @@ namespace Lazy.ExifManagement
 {
     internal static class ImagesExtensions
     {
-        private static readonly HashSet<string> ImageExtensions = new(StringComparer.OrdinalIgnoreCase) {".jpg", ".heic"};
-
-        internal static IEnumerable<MappableImage> GetImages(this DirectoryInfo workingDirectory, RootImageHandler rootImageHandler) =>
-            AllImagesIn(workingDirectory)
-                .Select(fileInfo => ToMappableImage(fileInfo, rootImageHandler));
-
-        private static IEnumerable<FileInfo> AllImagesIn(DirectoryInfo directory) =>
-            directory
+        internal static IEnumerable<MappableImage> GetImages(this DirectoryInfo workingDirectory,
+            RootImageHandler rootImageHandler) =>
+            workingDirectory
                 .AllFiles()
-                .Where(IsAnImage);
-
-        private static bool IsAnImage(FileInfo fileInfo) =>
-            fileInfo.HasOfOfTheExtensions(ImageExtensions);
-
-        private static bool HasOfOfTheExtensions(this FileSystemInfo fileInfo, IReadOnlySet<string> imageExtensions) =>
-            imageExtensions.Contains(Path.GetExtension(fileInfo.Name));
+                .Select(fileInfo => ToMappableImage(fileInfo, rootImageHandler));
 
         private static MappableImage ToMappableImage(FileInfo fileInfo, RootImageHandler rootImageHandler)
         {
