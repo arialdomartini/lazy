@@ -5,6 +5,7 @@ using Lazy.CommandLine;
 using Lazy.ExifManagement;
 using Lazy.IPhoneBackupsManagement.New;
 using Lazy.IPhoneBackupsManagement.Old;
+using NExifTool;
 using CommandExtensions = Lazy.CommandLine.CommandExtensions;
 
 namespace Lazy
@@ -16,6 +17,7 @@ namespace Lazy
         private static int Main(string[] args)
         {
             var workingDirectory = new DirectoryInfo(CurrentPath);
+            var exifTool = new ExifTool(new ExifToolOptions { ExifToolPath = "/usr/bin/vendor_perl/exiftool" });
             
             var fromIPhoneOld = CommandExtensions.Create(
                 "from-iphone-old", "Converts a dump from iPhone into a date-based directory structure", 
@@ -23,7 +25,11 @@ namespace Lazy
 
             var fromIPhone = CommandExtensions.CreateWithOutput(
                 "from-iphone", "Converts a dump from iPhone into a date-based directory structure",
-                (dryRun, output) => new FromIPhone().Run(workingDirectory, output, dryRun));
+                (dryRun, output) =>
+                {
+                    new FromIPhone(exifTool)
+                        .Run(workingDirectory, output, dryRun);
+                });
 
             var fixExif = CommandExtensions.Create(
                 "fix-exif", "Set all the missing Exif dates in Exif in a directory, inferring the missing dates from directory names",

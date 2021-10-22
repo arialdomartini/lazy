@@ -11,9 +11,9 @@ namespace Lazy.IPhoneBackupsManagement.New
     {
         private readonly ExifTool _exifTool;
 
-        internal FromIPhone()
+        internal FromIPhone(ExifTool exifTool)
         {
-            _exifTool = new ExifTool(new ExifToolOptions {ExifToolPath = "/usr/bin/vendor_perl/exiftool"});
+            _exifTool = exifTool;
         }
 
         internal void Run(DirectoryInfo workingDirectory, DirectoryInfo output, bool dryRun)
