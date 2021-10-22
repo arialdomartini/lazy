@@ -8,26 +8,26 @@ namespace Lazy.ExifManagement
 {
     internal class FixExif
     {
-        private readonly RootImageHandler RootImageHandler;
-        private readonly CommandBuilder CommandBuilder;
+        private readonly RootImageHandler _rootImageHandler;
+        private readonly CommandBuilder _commandBuilder;
 
-        internal FixExif()
+        internal FixExif(RootImageHandler rootImageHandler)
         {
-            RootImageHandler = new RootImageHandler();
-            CommandBuilder = new CommandBuilder(new List<ICondition>
+            _rootImageHandler = rootImageHandler;
+            _commandBuilder = new CommandBuilder(new List<ICondition>
             {
-                new BothDefined(RootImageHandler),
+                new BothDefined(_rootImageHandler),
                 new NothingDefined(),
                 new OnlyExifDefined(),
-                new OnlyFileSystemDefined(RootImageHandler)
+                new OnlyFileSystemDefined(_rootImageHandler)
             });
         }
 
         internal void Run(DirectoryInfo workingDirectory, bool dryRun)
         {
             workingDirectory
-                .GetImages(RootImageHandler)
-                .Select(CommandBuilder.ToCommand)
+                .GetImages(_rootImageHandler)
+                .Select(_commandBuilder.ToCommand)
                 .ToList()
                 .ForEach(c =>
                 {
