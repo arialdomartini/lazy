@@ -10,14 +10,11 @@ namespace Lazy.IPhoneBackupsManagement.New
         internal FileInfo FileInfo { get; init; }
         internal DateTime DateTimeOriginal { get; init; }
 
-        internal static ImageWithExifDate Build(FileInfo fileInfo, Tag dateTimeOriginal) =>
+        internal static ImageWithExifDate Build(FileInfo fileInfo, DateTime dateTime) =>
             new()
             {
-                FileInfo = fileInfo, 
-                DateTimeOriginal = ParseDate(dateTimeOriginal)
+                FileInfo = fileInfo,
+                DateTimeOriginal = dateTime
             };
-
-        private static DateTime ParseDate(Tag dateTimeOriginal) =>
-            DateTime.Parse(dateTimeOriginal.Value.Split(" ").First().Replace(":", "/"));
     }
 }
