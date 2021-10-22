@@ -1,5 +1,4 @@
 using System.IO;
-using Lazy.IPhoneBackupsManagement.Old;
 
 namespace Lazy.IPhoneBackupsManagement.New.Operations
 {

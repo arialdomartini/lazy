@@ -10,7 +10,6 @@ namespace Lazy.IPhoneBackupsManagement.New
 {
     internal class ExifWrapper
     {
-        private const string DatetimeOriginal = "DateTimeOriginal";
         private readonly ExifTool _exifTool;
 
         internal ExifWrapper(ExifTool exifTool)
@@ -21,15 +20,15 @@ namespace Lazy.IPhoneBackupsManagement.New
         internal Option<DateTime> GetDateTimeOriginal(FileSystemInfo fileInfo) =>
             TryParse(ReadTagFromExif(fileInfo));
 
-        private static Option<DateTime> TryParse(Tag? dateTimeOriginal) =>
+        private static Option<DateTime> TryParse(Tag dateTimeOriginal) =>
             dateTimeOriginal is { IsDate: true } ? 
                 Prelude.Some(ParseDate(dateTimeOriginal)) : 
                 Prelude.None;
 
-        private Tag? ReadTagFromExif(FileSystemInfo fileInfo) =>
+        private Tag ReadTagFromExif(FileSystemInfo fileInfo) => 
             _exifTool
-                .GetTagsAsync(fileInfo.FullName).Result
-                .FirstOrDefault(l => l.Name == DatetimeOriginal);
+                .GetTagsAsync(fileInfo.FullName).Result.FirstNonNullDate();
+
 
         private static DateTime ParseDate(Tag dateTimeOriginal) =>
             DateTime.Parse(dateTimeOriginal.Value.Split(" ").First().Replace(":", "/"));
@@ -39,7 +38,7 @@ namespace Lazy.IPhoneBackupsManagement.New
             Console.WriteLine($"Updating exif date to {dateTime} to file {fileInfo.FullName}");
             var update = new List<Operation>
             {
-                new SetOperation(new Tag(DatetimeOriginal, dateTime.ToString("u"))),
+                new SetOperation(new Tag(ExifToolExtensions.DatetimeOriginal, dateTime.ToString("u"))),
             };
 
             

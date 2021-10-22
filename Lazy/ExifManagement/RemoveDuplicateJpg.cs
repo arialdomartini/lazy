@@ -9,7 +9,7 @@ namespace Lazy.ExifManagement
     {
         public static void Run(DirectoryInfo workingDirectory, bool dryRun)
         {
-            ILookup<string, FileInfo> groupBy = workingDirectory
+            var groupBy = workingDirectory
                 .AllFiles()
                 .Where(f => f.Extension.ToLower() is ".jpg" or ".heic")
                 .ToLookup(f => f.Extension.ToLower());
@@ -17,9 +17,8 @@ namespace Lazy.ExifManagement
             var jpgs = groupBy[".jpg"];
             var heics = groupBy[".heic"];
             
-            Console.WriteLine($"Found JPG: {jpgs.Count()}; HEIC: {heics.Count()}");
+            var toBeDeleted = jpgs.Select(j=>(Jpg:j, Heic:EquivalentHeic(j, heics))).Where(t => t.Heic!=null);
             
-            IEnumerable<(FileInfo Jpg, FileInfo Heic)> toBeDeleted = jpgs.Select(j=>(Jpg:j, Heic:EquivalentHeic(j, heics))).Where(t => t.Heic!=null);
             Console.WriteLine($"Found {toBeDeleted.Count()} to be deleted");
             foreach (var tuple in toBeDeleted)
             {
@@ -27,7 +26,7 @@ namespace Lazy.ExifManagement
             }
         }
 
-        private static FileInfo? EquivalentHeic(FileSystemInfo jpg, IEnumerable<FileInfo> heics) =>
+        private static FileInfo EquivalentHeic(FileSystemInfo jpg, IEnumerable<FileInfo> heics) =>
             heics.SingleOrDefault(h => h.HasSameNameOf(jpg));
 
         private static bool HasSameNameOf(this FileSystemInfo h, FileSystemInfo jpg) =>

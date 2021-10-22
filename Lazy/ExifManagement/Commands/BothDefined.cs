@@ -42,7 +42,7 @@ namespace Lazy.ExifManagement.Commands
                     select fileSystem.Date == exif.Date;
 
                 var message = areEqual.Match(
-                    areEqual => areEqual ? "OK" : $"Failure: Dates do not match (Exif: {exifDate}, FileSystem: {fileSystemDate})",
+                    a => a ? "OK" : $"Failure: Dates do not match (Exif: {exifDate}, FileSystem: {fileSystemDate})",
                     () => throw new InvalidDataException());
                 Console.WriteLine($"{_mappableImage.FileInfo.FullName}, AssertExifAndFileSystemDatesMatch, {message}");
             }
