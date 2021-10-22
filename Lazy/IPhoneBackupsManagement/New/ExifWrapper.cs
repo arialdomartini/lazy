@@ -15,20 +15,20 @@ namespace Lazy.IPhoneBackupsManagement.New
             _exifTool = exifTool;
         }
         
-        internal Option<DateTime> GetDateTimeOriginal(FileSystemInfo fileInfo)
-        {
-            var list = _exifTool.GetTagsAsync(fileInfo.FullName).Result;
-            var dateTimeOriginal = list.FirstOrDefault(l => l.Name == "DateTimeOriginal");
+        internal Option<DateTime> GetDateTimeOriginal(FileSystemInfo fileInfo) =>
+            TryParse(ReadTagFromExif(fileInfo));
 
-            if (dateTimeOriginal is not { IsDate: true })
-                return Prelude.None;
+        private static Option<DateTime> TryParse(Tag? dateTimeOriginal) =>
+            dateTimeOriginal is { IsDate: true } ? 
+                Prelude.Some(ParseDate(dateTimeOriginal)) : 
+                Prelude.None;
 
-            static DateTime ParseDate(Tag dateTimeOriginal1) =>
-                DateTime.Parse(dateTimeOriginal1.Value.Split(" ").First().Replace(":", "/"));
+        private Tag? ReadTagFromExif(FileSystemInfo fileInfo) =>
+            _exifTool
+                .GetTagsAsync(fileInfo.FullName).Result
+                .FirstOrDefault(l => l.Name == "DateTimeOriginal");
 
-            var dateTime = ParseDate(dateTimeOriginal);
-            return Prelude.Some(dateTime);
-        }
-
+        private static DateTime ParseDate(Tag dateTimeOriginal) =>
+            DateTime.Parse(dateTimeOriginal.Value.Split(" ").First().Replace(":", "/"));
     }
 }
