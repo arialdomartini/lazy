@@ -20,9 +20,11 @@ namespace Lazy.ExifManagement
             var toBeDeleted = jpgs.Select(j=>(Jpg:j, Heic:EquivalentHeic(j, heics))).Where(t => t.Heic!=null);
             
             Console.WriteLine($"Found {toBeDeleted.Count()} to be deleted");
-            foreach (var tuple in toBeDeleted)
+            foreach (var (jpg, heic) in toBeDeleted)
             {
-                Console.WriteLine($"{tuple.Jpg.Name} / {tuple.Heic.Name}");
+                Console.WriteLine($"{jpg.Name} / {heic.Name}");
+                if(!dryRun)
+                    File.Delete(jpg.FullName);
             }
         }
 
