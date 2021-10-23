@@ -47,13 +47,23 @@ namespace Lazy
                 dryRun => RemoveDuplicateJpg.Run(workingDirectory, dryRun)
             );
             
+            var separateIPhone5 = CommandExtensions.CreateWithOutput(
+                "identify-iphone5", "Identify which photos have been taken with iPhone 5",
+                (dryRun, output) =>
+                {
+                    new IdentifyIPhone5(exifWrapper)
+                        .Run(workingDirectory, dryRun);
+                    
+                });
+            
             var rootCommand = new RootCommand
             {
                 new Option("--version", "The current version of this tool"),
                 fromIPhoneOld,
                 fromIPhone,
                 fixExif,
-                removeDuplicateJpg
+                removeDuplicateJpg,
+                separateIPhone5
             };
             rootCommand.Handler = CommandHandler.Create(Version.VersionHandler);
 

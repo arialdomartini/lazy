@@ -50,5 +50,10 @@ namespace Lazy.IPhoneBackupsManagement.New
             writeFileStream.Close();
             writeFileStream.Dispose();
         }
+
+        internal string GetLensId(FileInfo fileInfo) =>
+            _exifTool
+                .GetTagsAsync(fileInfo.FullName).Result
+                .FirstOrDefault(l => l.Name == "Model")?.Value;
     }
 }
