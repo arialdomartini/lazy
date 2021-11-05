@@ -20,18 +20,22 @@ namespace Lazy.IPhoneBackupsManagement.New
         internal Option<DateTime> GetDateTimeOriginal(FileSystemInfo fileInfo) =>
             TryParse(ReadTagFromExif(fileInfo));
 
-        private static Option<DateTime> TryParse(Tag dateTimeOriginal) =>
-            dateTimeOriginal is { IsDate: true } ? 
-                Prelude.Some(ParseDate(dateTimeOriginal)) : 
-                Prelude.None;
+        private static Option<DateTime> TryParse(Tag dateTimeOriginal)
+        {
+            try
+            {
+                return DateTime.Parse(dateTimeOriginal.Value.Split(" ").First().Replace(":", "/"));
+            }
+            catch
+            {
+                return Prelude.None;
+            }
+        }
 
         private Tag ReadTagFromExif(FileSystemInfo fileInfo) => 
             _exifTool
                 .GetTagsAsync(fileInfo.FullName).Result.FirstNonNullDate();
 
-
-        private static DateTime ParseDate(Tag dateTimeOriginal) =>
-            DateTime.Parse(dateTimeOriginal.Value.Split(" ").First().Replace(":", "/"));
 
         internal void UpdateDateTimeOriginal(FileInfo fileInfo, DateTime dateTime)
         {
